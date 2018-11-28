@@ -22,7 +22,7 @@
 
 \item Visst stöd för \Emph{funktionsprogrammering}
 
-\item Typer måste alltid anges, ibland två gånger (variabeldeklaration + instansiering)
+\item Typer måste anges, ibland två gånger (variabeldeklaration + instansiering)
 \end{itemize}
 
 \columnbreak
@@ -35,7 +35,7 @@
 
 \item Omfattande stöd för \Emph{funktionsprogrammering}
 
-\item Typinfo ska finnas vid kompileringstid men kan ofta härledas av kompilatorn
+\item Typer kan för det mesta härledas av kompilatorn.
 \end{itemize}
 
 \end{multicols}
@@ -44,9 +44,9 @@
 
 
 
-\begin{Slide}{Några saker som finns i Scala men inte i Java}\SlideFontSmall
+\begin{Slide}{Några saker som finns i Scala men inte i Java}\SlideFontTiny
 \vspace{-1em}\begin{multicols}{2}
-\begin{itemize}\SlideFontSize{7}{8}
+\begin{itemize}\SlideFontSize{6.8}{7.2}
 \item \code{case}-klasser
 
 \item Lokala funktioner
@@ -85,15 +85,15 @@
 
 \item Tomma värdet () av typen \code{Unit}
 
-\item Option, Some, None
+\item \code{Option}, \code{Some}, \code{None}  (Java har \code{Optional} som ger en del, men inte allt...)
 
-\item Try, Success, Failure
+\item \code{Try}, \code{Success}, \code{Failure}
 
 \item Samlingarna i Scalas standardbibliotek, speciellt de \Emph{oföränderliga} samlingarna \code{Vector}, \code{Map}, \code{Set}, \code{List}, etc.
 
-\item Enhetlig användning av samlingar inkl. Array
-
 \item Innehållslikhet med \code{==} för oföränderliga strukturer, inkl. \code{< <= > >= } på strängar
+
+\item \Alert{Enhetlig} användning av samlingar \Emph{inkl. Array} (förutom innehållslikhet för Array)
 
 \item Implicita värden och klasser
 
@@ -107,7 +107,9 @@
 
 \item Typ-alias och abstrakta typer med \code{type}
 
-\item Implicita värden och klasser
+\item Implicita värden \Eng{implicits values}
+
+\item Extensionsmetoder \Eng{extension methods}
 
 \item ...
 \end{itemize}
@@ -115,9 +117,15 @@
 \end{Slide}
 
 
-\begin{Slide}{Några saker som finns i Java men inte i Scala}\SlideFontSmall
-\vspace{-0.7em}\begin{multicols}{2}
-\begin{itemize}\SlideFontSize{7.5}{8.5}
+\begin{Slide}{Några saker som finns i Java men inte i Scala}
+\vspace{-0.7em}\begin{multicols}{2}\SlideFontTiny
+\begin{itemize}
+\item[\textbf{\texttt{+}}] Snabbare kompilering
+
+\item[\textbf{\texttt{+}}] Uppräknade typer med {\texttt{\bfseries{\color{eclipsepurple}{enum}}}} (kommer i Scala 3)
+
+\item[\textbf{\texttt{+}}] Mer omfattande IDE-stöd (kommer i Scala 3 via LSP)
+
 \item Variabeldeklaration utan initialisering
 
 \item Förändringsbara parametrar
@@ -126,21 +134,19 @@
 
 \item C-liknande \code{for}-sats
 
-\item Semikolon efter alla satser
+\item Semikolon krävs efter alla satser
+
+\item \jcode{return} krävs i alla metoder som har returvärde
+
+\item Nyckelordet \jcode{void}
 
 \item Parenteser efter alla metoder
 
 \item Specialsyntax för indexering av array \code{[]} ej som i andra samlingar
 
-\item Uppräknade typer med {\texttt{\bfseries{\color{eclipsepurple}{enum}}}}
-
 \item Hoppa ut ur loop med \jcode{break} \\ \href{https://docs.oracle.com/javase/tutorial/java/nutsandbolts/branch.html}{\SlideFontSize{5.2}{8.5}docs.oracle.com/javase/tutorial/java/nutsandbolts/branch.html}
 
 \item \jcode{switch} ''faller igenom'' utan \jcode{break}
-
-\item Nästan alltid snabbare kompilering
-
-\item Mer omfattande IDE-stöd
 
 \item Kontrollerade undantag \Eng{checked exceptions} och \jcode{throws}
 
@@ -184,19 +190,20 @@ public class JMain {
 Exempel på variabeldeklarationer i
 \begin{multicols}{2}
 \Emph{Scala}
-\begin{CodeSmall}[basicstyle=\ttfamily\SlideFontSize{8}{10}]
+\begin{CodeSmall}[basicstyle=\ttfamily\SlideFontSize{7}{10}]
   var i1: Int = 0
   var i2 = 0
   var i3 = 0: Int
-  var p = new Point(0, 0)
+  var p1: Point = new Point(0, 0)
+  var p2 = new Point(0, 0)
   var (x, y) = (0, 0)
   val a = 0
   final val Constant = 42
 \end{CodeSmall}
 \begin{itemize}\SlideFontTiny
-\item i2 härledd typ; går ej i Java
+\item i2 härledd typ; går ej i Java 8,9 men finns med \code{var} i Java 10
 
-\item i3 typ i uttryck; går ej i Java
+\item i3 typ varhelst i uttryck; går ej i Java
 
 \item (x, y) mönster i init; går ej i Java
 
@@ -206,10 +213,12 @@ Exempel på variabeldeklarationer i
 \columnbreak
 
 \Emph{Java}
-\begin{CodeSmall}[language=Java,basicstyle=\ttfamily\SlideFontSize{8}{10}]
+\begin{CodeSmall}[language=Java,morekeywords={var},basicstyle=\ttfamily\SlideFontSize{7}{10}]
   int i1 = 0;
+  var i2 = 0; // från Java 10
   int i4;
-  Point p = new Point(0, 0);
+  Point p1 = new Point(0, 0);
+  var p2 = new Point(0, 0); //Java 10
   final int CONSTANT = 42;
 \end{CodeSmall}
 \begin{itemize}\SlideFontTiny
@@ -219,48 +228,6 @@ Exempel på variabeldeklarationer i
 
 \end{Slide}
 
-
-
-
-\begin{Slide}{For-sats i Scala och Java}
-\begin{multicols}{2}
-\Emph{Scala}
-\begin{CodeSmall}[basicstyle=\ttfamily\SlideFontSize{6}{8}]
-val s = "Abbasillen"
-
-// Loopa över index framlänges:
-
-for (i <- s.indices) {
-  println(s(i))
-}
-
-// Loopa över index baklänges:
-
-for (i <- s.indices.reverse) {
-  println(s(i))
-}
-\end{CodeSmall}
-
-\columnbreak
-
-\Emph{Java}
-\begin{CodeSmall}[language=Java,basicstyle=\ttfamily\SlideFontSize{6}{8}]
-String s = "Abbasillen";
-
-// Loopa över index framlänges:
-
-for (int i = 0; i < s.length(); i++) {
-    System.out.println(s.charAt(i));
-}
-
-// Loopa över index baklänges:
-
-for (int i = s.length()-1; i >= 0; i--) {
-    System.out.println(s.charAt(i));
-}
-\end{CodeSmall}
-\end{multicols}
-\end{Slide}
 
 
 
@@ -306,8 +273,51 @@ I Scala är \code{s.indices} att föredra!
 \end{Slide}
 
 
+\begin{Slide}{For-sats i Scala och Java}
+\begin{multicols}{2}
+\Emph{Scala}
+\begin{CodeSmall}[basicstyle=\ttfamily\SlideFontSize{6}{8}]
+val s = "Abbasillen"
 
-\begin{Slide}{For-each-sats i Scala och Java}
+// Loopa över index framlänges:
+
+for (i <- s.indices) {
+  println(s(i))
+}
+
+// Loopa över index baklänges:
+
+for (i <- s.indices.reverse) {
+  println(s(i))
+}
+\end{CodeSmall}
+
+\columnbreak
+
+\Emph{Java}
+\begin{CodeSmall}[language=Java,basicstyle=\ttfamily\SlideFontSize{6}{8}]
+String s = "Abbasillen";
+
+// Loopa över index framlänges:
+
+for (int i = 0; i < s.length(); i++) {
+    System.out.println(s.charAt(i));
+}
+
+// Loopa över index baklänges:
+
+for (int i = s.length()-1; i >= 0; i--) {
+    System.out.println(s.charAt(i));
+}
+\end{CodeSmall}
+\end{multicols}
+\end{Slide}
+
+
+
+
+
+\begin{Slide}{For-each-sats i Java}
 \begin{multicols}{2}
 \Emph{Scala}
 \begin{CodeSmall}[basicstyle=\ttfamily\SlideFontSize{6}{8}]
@@ -334,7 +344,12 @@ for (char ch: s.toCharArray()) {
 \end{CodeSmall}
 \end{multicols}
 
-\pause\code{s.foreach(println)       } går ej i Java
+\pause
+{\SlideFontSmall
+\code{s.foreach(println)  } går ej i Java men
+från Java 8 finns metoden \code{chars} som ger en \code{IntStream} och då kan man:
+ \jcode{str.chars().forEachOrdered(i -> System.out.println((char) i));}
+ }
 \end{Slide}
 
 
@@ -408,7 +423,7 @@ class MutablePerson(var name: String) {
   def age_=(a: Int): Unit =
     if (a >= 0) _age = a else _age = 0  //undantag?
 
-  def isAdult: Boolean = 
+  def isAdult: Boolean =
     age >= MutablePerson.AdultAge
 }
 
@@ -522,6 +537,7 @@ object Person {
 }
 \end{CodeSmall}
 
+\pause
 \columnbreak
 
 En oföränderlig datatyp i \Emph{Java} med \Alert{motsvarande} funktionalitet kräver egen implementation av dessa metoder:
@@ -593,7 +609,7 @@ strings(1) = "second"
 \begin{CodeSmall}[language=Java,basicstyle=\ttfamily\SlideFontSize{6}{8}]
 int[] xs = new int[]{42, 43, 44};
 
-// samma som ovan, men kortare:
+// betyder samma som ovan, men kortare:
 int[] xs2 = {42, 43, 44};
 
 int n = xs.length;  // OBS! EJ length()
